@@ -1,0 +1,6 @@
+<app-header (scaleChange)="scale = $event" (openSettingsClick)="showSettings = true" (viewModeChange)="viewMode = $event" (activeTabChange)="displayedMediaType = $event" (showGroupsChange)="showGroups = $event" (triggerSearch)="searchText = $event"></app-header>
+<ng-container *ngIf="!showSettings">
+    <app-media-list [media]="displayedMedia" [class.detailsOpen]="selectedMedia" [(selectedMedia)]="selectedMedia" [viewMode]="viewMode" [scale]="scale"></app-media-list>
+    <app-media-details *ngIf="selectedMedia" [media]="selectedMedia" (closeClick)="selectedMedia = null"></app-media-details>
+</ng-container>
+<app-settings *ngIf="showSettings" (closeClick)="closeSettings()"></app-settings>

@@ -1,0 +1,95 @@
+import { Component } from "@angular/core";
+import { MediaEntity } from "../../models/media-entity";
+import { MediaService } from "../../providers/media.service";
+import { ViewMode } from "../media-list/media-list.component";
+import { Movie } from "../../models/movie";
+import { Series } from "../../models/series";
+
+export type MediaType = "movies" | "series";
+
+@Component({
+    selector: "app-home",
+    templateUrl: "./home.component.html",
+    styleUrls: ["./home.component.scss"]
+})
+export class HomeComponent {
+    public selectedMedia: MediaEntity;
+    public scale: number;
+    public viewMode: ViewMode;
+    public showSettings: boolean = false;
+    public loadedMedia: MediaEntity[];
+    public displayedMedia: MediaEntity[];
+
+    private _displayedMediaType: MediaType;
+    public get displayedMediaType(): MediaType {
+        return this._displayedMediaType;
+    }
+    public set displayedMediaType(value: MediaType) {
+        this._displayedMediaType = value;
+        this.loadMedia();
+    }
+
+    private _showGroups: boolean;
+    public get showGroups(): boolean {
+        return this._showGroups;
+    }
+    public set showGroups(value: boolean) {
+        this._showGroups = value;
+        this.loadMedia();
+    }
+
+    private _searchText: string;
+    public get searchText(): string {
+        return this._searchText;
+    }
+    public set searchText(value: string) {
+        this._searchText = value.toLocaleLowerCase();
+        this.filterMedia();
+    }
+
+    constructor(private mediaService: MediaService) { }
+
+    public loadMedia() {
+        // Reload only when closing settings or not loaded yet.
+        this.loadedMedia = [];
+        if (this.displayedMediaType && this.showGroups != null) {
+            switch (this.displayedMediaType) {
+                case "movies":
+                    this.loadedMedia = this.showGroups ? this.mediaService.getGroupedMovies() : this.mediaService.getMovies();
+                    break;
+                case "series":
+                    this.loadedMedia = this.showGroups ? this.mediaService.getGroupedSeries() : this.mediaService.getSeries();
+                    break;
+                default:
+                    break;
+            }
+        }
+        this.filterMedia();
+    }
+
+    public closeSettings() {
+        this.showSettings = false;
+        this.mediaService.clearData();
+        this.loadMedia();
+    }
+
+    private filterMedia() {
+        if (this.searchText != null && !this.showGroups) {
+            this.displayedMedia = this.loadedMedia.filter(value => {
+                if (value.name && value.name.toLocaleLowerCase().includes(this.searchText) ||
+                    value.saveData.description && value.saveData.description.toLocaleLowerCase().includes(this.searchText)) {
+                    return true;
+                }
+                if (value instanceof Movie || value instanceof Series) {
+                    if (value.saveData.actors && value.saveData.actors.toLocaleLowerCase().includes(this.searchText) ||
+                        value.saveData.genre && value.saveData.genre.toLocaleLowerCase().includes(this.searchText) ||
+                        value.saveData.year && value.saveData.year.toLocaleLowerCase().includes(this.searchText)) {
+                        return true;
+                    }
+                }
+            });
+        } else {
+            this.displayedMedia = this.loadedMedia;
+        }
+    }
+}

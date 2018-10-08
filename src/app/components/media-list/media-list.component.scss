@@ -1,0 +1,120 @@
+$imageAspectRatioWidth: 27;
+$imageAspectRatioHeight: 40;
+
+$cellPadding: 5px;
+$imageWidth: 135px;
+$imageHeight: 200px;
+
+.media {
+    cursor: pointer;
+    padding: $cellPadding;
+    border-radius: 5px;
+    position: relative;
+
+    img {
+        border-radius: 5px;
+    }
+
+    .details {
+        overflow: hidden;
+
+        .name {
+            font-weight: bold;
+        }
+    }
+
+    &:not(.group) img {
+        background-image: url(../../../assets/poster-missing.png);
+        background-size: cover;
+    }
+
+    &.group {
+        &:before {
+            font-family: "Font Awesome 5 Free";
+            content: "\f07b";
+            font-size: 100px;
+            display: block;
+            position: absolute;
+            left: 20px;
+            top: 45px;
+        }
+
+        &.open:before {
+            content: "\f07c";
+        }
+    }
+
+    &.grid {
+        width: $imageWidth + $cellPadding * 2;
+        display: inline-block;
+        vertical-align: top;
+
+        &:hover, &.selected {
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+
+        img {
+            display: block;
+            margin-bottom: 5px;
+            height: $imageHeight;
+            box-shadow: 2px 3px 8px 1px black;
+            width: 100%;
+        }
+    }
+
+    &.list {
+        display: block;
+        height: $imageHeight + $cellPadding * 2;
+        margin-bottom: 10px;
+        background-color: rgba(0, 0, 0, 0.25);
+
+        &:hover, &.selected {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        img {
+            height: 100%;
+            width: $imageWidth;
+            display: inline-block;
+        }
+
+        .detailsWrap {
+            width: calc(100% - #{$imageWidth});
+            display: inline-block;
+            vertical-align: top;
+            height: 100%;
+
+            .details {
+                margin-left: 10px;
+                height: 100%;
+
+                .name {
+                    font-size: 20px;
+                }
+
+                .year {
+                    height: 1em;
+                }
+
+                .description {
+                    margin-top: 10px;
+                }
+            }
+        }
+    }
+}
+
+app-media-list {
+    display: block;
+    
+    &.grid {
+        background-color: rgba(0, 0, 0, 0.25);
+        margin: 5px 20px;
+        padding: 5px;
+    }
+
+    &.list {
+        padding-left: 20px;
+    }
+
+}

@@ -1,0 +1,52 @@
+/* You can add global styles to this file, and also import other style files */
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  color: white;
+}
+
+.field, input[type="text"], textarea {
+    color: white;
+    border-width: 2px;
+    border-style: ridge;
+    padding: 1px 5px;
+    background: none;
+}
+
+.field:not(input):not(textarea) {
+    border-color: transparent;
+}
+
+input[type="text"], textarea {
+    border-color: grey;
+}
+
+textarea {
+    resize: none;
+}
+
+// the scrollbar.
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+:hover {
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+}
+
+::-webkit-scrollbar-thumb {
+    cursor: pointer;
+    
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+}

@@ -1,0 +1,23 @@
+<div class="searchColumn">
+    <div class="searchField">
+        <form #searchForm (ngSubmit)="searchRecords()">
+            <input name="name" type="text" [(ngModel)]="name">
+            <i class="searchButton fas fa-search" (click)="searchRecords()"></i>
+        </form>
+    </div>
+    <div class="searchResults">
+        <div class="result" [class.selected]="result === selectedSearchResult" *ngFor="let result of results" (click)="selectedSearchResult = result"
+            [title]="result.Title">{{result.Title}}</div>
+    </div>
+</div>
+<div class="resultDetails" *ngIf="resultDetails">
+    <div class="poster" (click)="fieldClicked('poster', resultDetails.Poster)" *ngIf="resultDetails.Poster !== 'N/A'">
+        <img [src]="resultDetails.Poster" alt="">
+    </div>
+    <div class="title" (click)="fieldClicked('title', resultDetails.Title)">{{resultDetails.Title}}</div>
+    <div class="year" (click)="fieldClicked('year', resultDetails.Year)">{{resultDetails.Year}}</div>
+    <div class="runtime" (click)="fieldClicked('runtime', resultDetails.Runtime)">{{resultDetails.Runtime}}</div>
+    <div class="genre" (click)="fieldClicked('genre', resultDetails.Genre)">{{resultDetails.Genre}}</div>
+    <div class="plot" (click)="fieldClicked('plot', resultDetails.Plot)">{{resultDetails.Plot}}</div>
+    <div class="actors" (click)="fieldClicked('actors', resultDetails.Actors)">{{resultDetails.Actors}}</div>
+</div>

@@ -1,0 +1,64 @@
+.buttons {
+    float: right;
+    
+    > i {
+        font-size: 30px;
+        margin-left: 10px;
+        opacity: 0.5;
+        cursor: pointer;
+    
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+}
+
+.settings {
+    .row {
+        margin-bottom: 5px;
+        display: block;
+
+        >div {
+            display: inline-block;
+            vertical-align: top;
+
+            &:first-child {
+                width: 180px;
+            }
+
+            &.array {
+                input {
+                    &:not(:first-child) {
+                        border-top: none;
+                    }
+                    &:not(:last-of-type) {
+                        border-bottom: none;
+                    }
+                }
+                i {
+                    cursor: pointer;
+
+                    &.remove {
+                        position: relative;
+                        left: -18px;
+                    }
+
+                    &.add {
+                        margin-top: 5px;
+                    }
+                }
+            }
+        }
+
+        .fileSelect{
+            cursor: pointer;
+            position: relative;
+            left: -23px;
+
+            input {
+                display: none;
+            }
+        }
+    }
+    
+}

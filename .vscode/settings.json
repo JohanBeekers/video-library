@@ -1,0 +1,18 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/release": true
+    },
+    "editor.detectIndentation": false,
+    "editor.rulers": [160],
+    "relativePath.removeExtension": true,
+    "scss.validate": false,
+    "editor.formatOnSave": true,
+    "prettier.disableLanguages": ["scss"]
+}

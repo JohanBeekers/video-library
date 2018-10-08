@@ -1,0 +1,193 @@
+@import "../../../styles/globals.scss";
+$imageWidth: 300px;
+$imageRightMargin: 10px;
+
+:host {
+    overflow-y: auto;
+}
+
+.buttons {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    
+    .close, .edit, .complete, .omdb, .play, .open {
+        font-size: 30px;
+        color: white;
+        opacity: 0.5;
+        cursor: pointer;
+    
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    .close, .edit, .complete, .omdb {
+        float: right;
+        margin-left: 10px;
+    }
+
+    .play, .open {
+        margin-right: 10px;
+    }
+}
+
+.details {
+
+    img {
+        float: left;
+        background-image: url(../../../assets/poster-missing.png);
+        background-size: cover;
+        min-height: 300px;
+        width: $imageWidth;
+        border-radius: 5px;
+        margin-right: $imageRightMargin;
+    }
+
+    .fields {
+        display: inline-block;
+        vertical-align: top;
+        width: calc(100% - #{$imageWidth} - #{$imageRightMargin});
+        margin-bottom: 10px;
+
+        textarea {
+            height: 300px;
+        }
+
+        .name {
+            font-size: 46px;
+            margin-bottom: 5px;
+            width: 100%;
+            color: goldenrod;
+        }
+
+        .subHeader {
+            margin-bottom: 5px;
+            
+            .field {
+                display: inline-block;
+            }
+
+            .year {
+                width: 90px;
+            }
+    
+            .runtime {
+                width: 80px;
+            }
+
+            .genre {
+                width: calc(100% - 198px);
+                min-width: 100px;
+            }
+        }
+
+        .plot {
+            width: 100%;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .actors {
+            width: 100%;
+        }
+    }
+
+    .seriesContent {
+        display: inline-block;
+        background-color: darken($color: $backgroundColor, $amount: 6);
+        border: 2px ridge grey;
+
+        .seasons {
+            display: inline-block;
+            vertical-align: top;
+            overflow-y: auto;
+            height: 100%;
+            border-right: 2px ridge grey;
+            width: 100px;
+
+            .marker {
+                display: inline-block;
+                vertical-align: top;
+                width: 15px;
+                padding-left: 5px;
+                cursor: pointer;
+
+                &:not(.marked) {
+                    color: transparent;
+                }
+            }
+
+            .season {
+                display: inline-block;
+                vertical-align: top;
+                width: calc(100% - 20px);
+                white-space: nowrap;
+                overflow: hidden;
+                padding: 0px 5px;
+                
+                &:hover, &.selected {
+                    &:not(.missing) {
+                        cursor: pointer;
+                        background-color: darken($color: $backgroundColor, $amount: 8);
+                    }
+                }
+
+                &.missing {
+                    color: grey;
+                }
+            }
+        }
+
+        .episodes {
+            display: inline-block;
+            vertical-align: top;
+            overflow-y: auto;
+            height: 100%;
+            width: 120px;
+
+            .marker {
+                display: inline-block;
+                vertical-align: top;
+                width: 15px;
+                padding-left: 5px;
+                cursor: pointer;
+
+                &:not(.marked) {
+                    color: transparent;
+                }
+
+                &:hover {
+                    color: inherit;
+                }
+            }
+
+            .episode {
+                display: inline-block;
+                vertical-align: top;
+                width: calc(100% - 20px);
+                white-space: nowrap;
+                overflow: hidden;
+                padding: 0px 5px;
+                
+                &:hover:not(.missing) {
+                    cursor: pointer;
+                    background-color: darken($color: $backgroundColor, $amount: 8);
+                }
+
+                &.missing {
+                    color: grey;
+                }
+            }
+        }
+    }
+
+    app-omdb-suggestions {
+        position: fixed;
+        bottom: 5px;
+        left: 5px;
+        height: 50%;
+        width: 50%;
+    }
+}
+

@@ -1,0 +1,42 @@
+<div class="titlebar">
+    <div class="dragHandle"></div>
+    <span class="title">Video Library</span>
+    <div class="buttons">
+        <div class="reload" (click)="reload()" title="Reload application"><i class="fas fa-redo"></i></div>
+        <div class="devtools" (click)="openDevTools()" title="Open devtools"><i class="fas fa-toolbox"></i></div>
+        <div class="settings" (click)="openSettingsClick.emit()" title="Open application settings"><i class="fas fa-cog"></i></div>
+        <div class="minimize" (click)="minimize()"><i class="far fa-window-minimize"></i></div>
+        <div class="maximize" (click)="maximize()">
+            <i class="far fa-window-maximize" *ngIf="!isMaximized()"></i>
+            <i class="far fa-window-restore" *ngIf="isMaximized()"></i>
+        </div>
+        <div class="close" (click)="close()"><i class="fas fa-times"></i></div>
+    </div>
+</div>
+<div class="header">
+    <div class="tabs">
+        <div class="movies" [class.active]="activeTab === 'movies'" (click)="activeTab = 'movies'"><span>Movies</span></div>
+        <div class="series" [class.active]="activeTab === 'series'" (click)="activeTab = 'series'"><span>Series</span></div>
+    </div>
+    <div class="viewSettings">
+        <label class="checkbox showGroups" [class.active]="showGroups">
+            <input type="checkbox" [(ngModel)]="showGroups">
+            <i class="fas fa-folder-open" title="Show groupings" *ngIf="showGroups"></i>
+            <i class="fas fa-folder" title="Hide groupings" *ngIf="!showGroups"></i>
+        </label>
+        <input type="range" [(ngModel)]="scale" min="0.12" max="2.00" step="0.01" title="Item size" />
+        <label class="checkbox syncScale" [class.active]="syncScale" title="Lock/unlock size between views">
+            <input type="checkbox" [(ngModel)]="syncScale">
+            <i class="fas fa-lock" title="Unlock size between views" *ngIf="syncScale"></i>
+            <i class="fas fa-unlock" title="Lock size between views" *ngIf="!syncScale"></i>
+        </label>
+        <div class="button" title="Grid view" [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'"><i class="fas fa-th"></i></div>
+        <div class="button" title="List view" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'"><i class="fas fa-th-list"></i></div>
+    </div>
+    <div class="search">
+        <form (ngSubmit)="search()">
+            <input name="search" type="text" [(ngModel)]="searchText">
+            <i class="searchButton fas fa-search" (click)="search()"></i>
+        </form>
+    </div>
+</div>

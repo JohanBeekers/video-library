@@ -1,0 +1,49 @@
+$headerHeight: 60px;
+$backgroundColor: #0a415a;
+
+:host {
+   display: block;
+   background-color: $backgroundColor;
+   width: 100%;
+   height: 100%;
+}
+
+app-header {
+   background-color: darken($color: $backgroundColor, $amount: 7);
+   display: block;
+   height: $headerHeight;
+   box-shadow: 0px 0px 15px 0px black;
+   z-index: 1;
+   position: relative;
+}
+
+app-media-list {
+   height: calc(100% - #{$headerHeight});
+   width: 100%;
+   vertical-align: top;
+   display: inline-block;
+   padding: 10px;
+   overflow-y: auto;
+
+   &.detailsOpen {
+       width: 50%;
+   }
+}
+
+app-media-details {
+    display: inline-block;
+    background-color: darken($color: $backgroundColor, $amount: 3);
+    padding: 10px;
+    height: CALC(100% - #{$headerHeight});
+    width: 50%;
+    vertical-align: top;
+    box-shadow: 0px 0px 15px 0px black;
+}
+
+app-settings {
+    display: block;
+    padding: 10px;
+    height: CALC(100% - #{$headerHeight});
+    width: 100%;
+    overflow-y: auto;
+}

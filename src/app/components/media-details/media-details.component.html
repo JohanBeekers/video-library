@@ -1,0 +1,64 @@
+<ng-container *ngIf="media">
+    <div class="buttons">
+        <i class="play fas fa-play" (click)="playClicked()" *ngIf="media.type === 'movie'" title="Play"></i>
+        <i class="open fas fa-folder-open" (click)="openFolder()" title="Open directory"></i>
+        <i class="close fas fa-times" (click)="closeClicked()" title="Cancel/Close"></i>
+        <i class="edit fas fa-edit" (click)="editMode = true" *ngIf="!editMode" title="Edit"></i>
+        <i class="complete fas fa-check" (click)="finishEdit()" *ngIf="editMode" title="Complete edit"></i>
+        <i class="omdb fab fa-imdb" (click)="showSuggestions = !showSuggestions" *ngIf="editMode && media.type !== 'group'"
+            title="OMDb suggestions"></i>
+    </div>
+    <div class="details" [class.editMode]="editMode">
+        <img #poster [src]="posterPath" alt="" />
+        <div class="fields">
+            <ng-container *ngIf="editMode">
+                <input class="name field" type="text" [(ngModel)]="formData.name" placeholder="Name" />
+                <div class="subHeader" *ngIf="media.type !== 'group'">
+                    <input class="year field" type="text" [(ngModel)]="formData.year" placeholder="Year" /> &bull;
+                    <ng-container *ngIf="media.type === 'movie'">
+                        <input class="runtime field" type="text" [(ngModel)]="formData.runtime" placeholder="Runtime" />&bull;
+                    </ng-container>
+                    <input class="genre field" type="text" [(ngModel)]="formData.genre" placeholder="Genre" />
+                </div>
+                <textarea class="plot field" [(ngModel)]="formData.description" placeholder="Plot"></textarea>
+                <input class="actors field" type="text" [(ngModel)]="formData.actors" placeholder="Actors" *ngIf="media.type !== 'group'" />
+            </ng-container>
+            <ng-container *ngIf="!editMode">
+                <div class="name field">{{formData.name}}</div>
+                <div class="subHeader" *ngIf="media.type !== 'group'">
+                    <div class="year field">{{formData.year}}</div> &bull;
+                    <ng-container *ngIf="media.type === 'movie'">
+                        <div class="runtime field">{{formData.runtime}}</div> &bull;
+                    </ng-container>
+                    <div class="genre field">{{formData.genre}}</div>
+                </div>
+                <div class="plot field">{{formData.description}}</div>
+                <div class="actors field" *ngIf="media.type !== 'group'">{{formData.actors}}</div>
+            </ng-container>
+        </div>
+
+        <div class="seriesContent" *ngIf="!editMode && media.type === 'series'">
+            <div class="seasons">
+                <ng-container *ngFor="let season of media['seasons']; let index = index">
+                    <div class="marker" [class.marked]="this.media.saveData['markedSeason'] === index">&bull;</div>
+                    <div class="season" [class.selected]="selectedSeasonIndex === index" [class.missing]="!season"
+                        (click)="selectedSeasonIndex = season ? index : selectedSeasonIndex">
+                        Season {{index+1}}
+                    </div>
+                </ng-container>
+            </div>
+            <div class="episodes">
+                <ng-container *ngFor="let episode of media['seasons'][selectedSeasonIndex]?.episodes; let index = index">
+                    <div class="marker" [class.marked]="this.media.saveData['markedSeason'] === selectedSeasonIndex && this.media.saveData['markedEpisode'] === index"
+                        (click)="markEpisode(index)">&bull;</div>
+                    <div class="episode" [class.missing]="!episode" (click)="playEpisode(index)">
+                        Episode {{index+1}}
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+        <app-omdb-suggestions [type]="media.type" [name]="formData.name" (fieldClick)="suggestionClicked($event)" *ngIf="showSuggestions"></app-omdb-suggestions>
+
+    </div>
+</ng-container>

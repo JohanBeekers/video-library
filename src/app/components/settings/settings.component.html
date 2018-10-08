@@ -1,0 +1,37 @@
+<div class="buttons">
+    <i class="save far fa-save" title="save" (click)="save()"></i>
+    <i class="reload fas fa-redo" title="reload" (click)="reloadSettings()"></i>
+    <i class="reset fas fa-industry" title="reset" (click)="resetSettings()"></i>
+    <i class="close fas fa-times" title="close" (click)="close()"></i>
+</div>
+
+<div class="settings">
+    <div class="row">
+        <!-- <div>Movie directory:</div><input type="text" [(ngModel)]="settingsService.settings.movieDirectory"> -->
+        <div>Movie directory:</div><input type="text" [(ngModel)]="settingsService.settings.movieDirectory"><label
+            class="fileSelect"><i class="fas fa-folder-open"></i><input type="file" (change)="movieDirChanged($event)"
+                webkitdirectory></label>
+    </div>
+    <div class="row">
+        <!-- <div>Series directory:</div><input type="text" [(ngModel)]="settingsService.settings.seriesDirectory"> -->
+        <div>Series directory:</div><input type="text" [(ngModel)]="settingsService.settings.seriesDirectory"><label
+            class="fileSelect"><i class="fas fa-folder-open"></i><input type="file" (change)="seriesDirChanged($event)"
+                webkitdirectory></label>
+    </div>
+    <div class="row">
+        <div>OMDb API key:</div><input type="text" [(ngModel)]="settingsService.settings.omdbApiKey">
+    </div>
+    <div class="row">
+        <div>Movie extentions:</div>
+        <div class="extentions array">
+            <ng-container *ngFor="let extention of settingsService.settings.movieExtentions; let i = index; trackBy:arrayTrackByFn">
+                <input type="text" [(ngModel)]="settingsService.settings.movieExtentions[i]"><i class="remove fas fa-times"
+                    title="delete" (click)="settingsService.settings.movieExtentions.splice(i, 1)"></i><br />
+            </ng-container>
+            <i class="add fas fa-plus" title="add" (click)="settingsService.settings.movieExtentions.push('')"></i>
+        </div>
+    </div>
+    <div class="row">
+        <div>Theme:</div><input type="text" [(ngModel)]="settingsService.settings.theme">
+    </div>
+</div>

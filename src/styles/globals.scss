@@ -1,0 +1,19 @@
+$backgroundColor: #0a415a;
+
+@mixin center($axis: xy) {
+    position: absolute;
+
+    @if $axis == x {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    @if $axis == y {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    @if $axis == xy {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

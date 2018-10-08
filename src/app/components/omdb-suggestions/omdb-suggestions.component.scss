@@ -1,0 +1,109 @@
+@import "../../../styles/globals.scss";
+$searchColumnWidth: 240px;
+
+:host {
+    background-color: darken($color: $backgroundColor, $amount: 6);
+    color: white;
+    border: 2px ridge grey;
+}
+
+.searchColumn {
+    border-right: 2px ridge grey;
+    display: inline-block;
+    height: 100%;
+    width: $searchColumnWidth;
+    vertical-align: top;
+
+    .searchField {
+        width: 100%;
+        height: 30px;
+        margin-bottom: 10px;
+
+        form {
+            height: 100%;
+            
+            input {
+                height: 100%;
+                width: calc(100% - 30px);
+            }
+    
+            .searchButton {
+                opacity: 0.5;
+                cursor: pointer;
+                width: 30px;
+                text-align: center;
+            
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+        }
+    }
+
+    .searchResults {
+        width: 100%;
+        overflow-y: auto;
+        height: calc(100% - 30px);
+    
+        .result {
+            width: 100%;
+            white-space: nowrap;
+            cursor: pointer;
+            overflow: hidden;
+            padding: 0px 5px;
+    
+            &:hover, &.selected {
+                background-color: darken($color: $backgroundColor, $amount: 8);
+            }
+        }
+    }
+}
+
+.resultDetails {
+    padding: 5px;
+    overflow-y: auto;
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    width: calc(100% - #{$searchColumnWidth});
+
+    .poster {
+        display: block;
+        float: left;
+        margin-right: 5px;
+        cursor: pointer;
+        position: relative;
+
+        img {
+            width: 300px;
+        }
+
+        &:hover {
+            &:before {
+                font-family: "Font Awesome 5 Free";
+                content: "\f0c5";
+                font-size: 60px;
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+
+    > div:not(.poster) {
+        margin-bottom: 10px;
+        cursor: pointer;
+        
+        &:hover {
+            background-color: darken($color: $backgroundColor, $amount: 8);
+
+            &:after {
+                font-family: "Font Awesome 5 Free";
+                content: "\f0c5";
+                margin-left: 5px;
+            }
+        }
+    }
+}

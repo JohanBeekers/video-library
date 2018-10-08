@@ -1,0 +1,7 @@
+{
+    "movieDirectory": "D:\\Movies",
+    "seriesDirectory": "D:\\Series",
+    "theme": "dark",
+    "movieExtentions": [".avi", ".mkv", ".mp4", ".wmv", "VIDEO_TS.IFO"],
+    "omdbApiKey": ""
+}
