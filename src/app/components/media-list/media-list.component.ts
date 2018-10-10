@@ -17,7 +17,6 @@ export interface SortOrder {
     styleUrls: ["./media-list.component.scss"]
 })
 export class MediaListComponent {
-
     @Output()
     selectedMediaChange: EventEmitter<MediaEntity> = new EventEmitter();
 
@@ -72,8 +71,6 @@ export class MediaListComponent {
 
     public openedGroup: MediaGroup;
 
-    constructor(public mediaService: MediaService) { }
-
     /**
      * Click handler for media entities.
      * @param media - The media that has been clicked on.
@@ -114,6 +111,11 @@ export class MediaListComponent {
      * Sorts the provided media using the provided sorting order.
      */
     private sortMedia() {
+        if (!this.media) {
+            this.sortedMedia = [];
+            return;
+        }
+
         if (this.sortOrder) {
             this.sortedMedia = [...this.media].sort((a, b) => {
                 let sortDirection: number;
@@ -150,5 +152,4 @@ export class MediaListComponent {
             });
         }
     }
-
 }

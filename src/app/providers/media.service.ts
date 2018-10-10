@@ -1,18 +1,18 @@
 import { Injectable } from "@angular/core";
-import { ElectronService } from "./electron.service";
+import * as path from "path";
+import { Observable } from "rxjs";
+import { MediaEntity } from "../models/media-entity";
 import { MediaGroup } from "../models/media-group";
 import { Movie } from "../models/movie";
-import { MediaEntity } from "../models/media-entity";
-import * as path from "path";
-import { SettingsService } from "./settings.service";
 import { Season } from "../models/season";
 import { Series } from "../models/series";
+import { ElectronService } from "./electron.service";
+import { SettingsService } from "./settings.service";
 
 @Injectable({
     providedIn: "root"
 })
 export class MediaService {
-
     private groupedMovies: MediaEntity[];
     private allMovies: Movie[];
     private groupedSeries: MediaEntity[];
@@ -23,7 +23,7 @@ export class MediaService {
         return this._loadError;
     }
 
-    constructor(private electronService: ElectronService, private settingsService: SettingsService) { }
+    constructor(private electronService: ElectronService, private settingsService: SettingsService) {}
 
     /**
      * Loads all media in a directory.
@@ -146,43 +146,55 @@ export class MediaService {
     /**
      * Get all the loaded groups and movies.
      */
-    public getGroupedMovies(): MediaEntity[] {
-        if (!this.groupedMovies) {
-            this.loadMovies();
-        }
-        return this.groupedMovies;
+    public getGroupedMovies(): Observable<MediaEntity[]> {
+        return new Observable<MediaEntity[]>(observer => {
+            if (!this.groupedMovies) {
+                this.loadMovies();
+            }
+            observer.next(this.groupedMovies);
+            observer.complete();
+        });
     }
 
     /**
      * Get only the loaded movies. No groups or series.
      * This includes movies that where otherwise in a group.
      */
-    public getMovies(): Movie[] {
-        if (!this.allMovies) {
-            this.loadMovies();
-        }
-        return this.allMovies;
+    public getMovies(): Observable<Movie[]> {
+        return new Observable<Movie[]>(observer => {
+            if (!this.allMovies) {
+                this.loadMovies();
+            }
+            observer.next(this.allMovies);
+            observer.complete();
+        });
     }
 
     /**
      * Get all the loaded groups and series.
      */
-    public getGroupedSeries(): MediaEntity[] {
-        if (!this.groupedSeries) {
-            this.loadSeries();
-        }
-        return this.groupedSeries;
+    public getGroupedSeries(): Observable<MediaEntity[]> {
+        return new Observable<MediaEntity[]>(observer => {
+            if (!this.groupedSeries) {
+                this.loadSeries();
+            }
+            observer.next(this.groupedSeries);
+            observer.complete();
+        });
     }
 
     /**
      * Get only the loaded series. No groups or movies.
      * This includes series that where otherwise in a group.
      */
-    public getSeries(): Series[] {
-        if (!this.allSeries) {
-            this.loadSeries();
-        }
-        return this.allSeries;
+    public getSeries(): Observable<Series[]> {
+        return new Observable<Series[]>(observer => {
+            if (!this.allSeries) {
+                this.loadSeries();
+            }
+            observer.next(this.allSeries);
+            observer.complete();
+        });
     }
 
     /**

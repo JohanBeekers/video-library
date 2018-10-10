@@ -1,4 +1,11 @@
-import { app, BrowserWindow, screen, ipcMain, DownloadItem, shell } from "electron";
+import {
+    app,
+    BrowserWindow,
+    screen,
+    ipcMain,
+    DownloadItem,
+    shell
+} from "electron";
 import * as path from "path";
 import * as url from "url";
 import * as electronDl from "electron-dl";
@@ -8,7 +15,6 @@ const args = process.argv.slice(1);
 serve = args.some(val => val === "--serve");
 
 function createWindow() {
-
     const electronScreen = screen;
     const size = electronScreen.getPrimaryDisplay().workAreaSize;
 
@@ -19,9 +25,10 @@ function createWindow() {
         width: size.width,
         height: size.height,
         frame: false,
-        // webPreferences: {
-        //     webSecurity: false
-        // }
+        // Disable when building production version.
+        webPreferences: {
+            webSecurity: false
+        }
     });
 
     if (serve) {
@@ -30,11 +37,13 @@ function createWindow() {
         });
         win.loadURL("http://localhost:4200");
     } else {
-        win.loadURL(url.format({
-            pathname: path.join(__dirname, "dist/index.html"),
-            protocol: "file:",
-            slashes: true
-        }));
+        win.loadURL(
+            url.format({
+                pathname: path.join(__dirname, "dist/index.html"),
+                protocol: "file:",
+                slashes: true
+            })
+        );
     }
 
     // win.webContents.openDevTools();
@@ -46,11 +55,9 @@ function createWindow() {
         // when you should delete the corresponding element.
         win = null;
     });
-
 }
 
 try {
-
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
@@ -74,18 +81,20 @@ try {
     });
 
     ipcMain.on("saveUrl", (event, args2) => {
-        electronDl.download(BrowserWindow.getFocusedWindow(), args2.source, {
-            directory: args2.targetDir,
-            filename: args2.targetFileName
-        })
-            .then((dl: DownloadItem) => console.log(`saved: ${dl.getSavePath()}`))
+        electronDl
+            .download(BrowserWindow.getFocusedWindow(), args2.source, {
+                directory: args2.targetDir,
+                filename: args2.targetFileName
+            })
+            .then((dl: DownloadItem) =>
+                console.log(`saved: ${dl.getSavePath()}`)
+            )
             .catch(console.error);
     });
 
     ipcMain.on("openFile", (event, args2) => {
         shell.openItem(args2);
     });
-
 } catch (e) {
     // Catch Error
     // throw e;

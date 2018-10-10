@@ -1,29 +1,25 @@
-<ng-container *ngIf="!mediaService.loadError;else notElectronMessage">
-    <ng-container *ngFor="let entity of sortedMedia">
-        <div [ngClass]="{selected: entity === selectedMedia, open: entity === openedGroup}" [class]="viewMode + ' ' + entity.type + ' media'"
-            [style.zoom]="scale" (click)="mediaClick(entity)" (dblclick)="mediaClick(entity, true)">
-            <ng-container *ngIf="viewMode === 'grid'">
-                <img [src]="'file:///'+entity.imagePath" alt=""/>
+<i *ngIf="!media" class="fas fa-spinner fa-pulse"></i>
+<ng-container *ngFor="let entity of sortedMedia">
+    <div [ngClass]="{selected: entity === selectedMedia, open: entity === openedGroup}" [class]="viewMode + ' ' + entity.type + ' media'"
+        [style.zoom]="scale" (click)="mediaClick(entity)" (dblclick)="mediaClick(entity, true)">
+        <ng-container *ngIf="viewMode === 'grid'">
+            <img [src]="'file:///'+entity.imagePath" alt="" />
+            <div class="details" [style.zoom]="negateScale">
+                <div class="name">{{entity.name}}</div>
+                <div class="year" *ngIf="!isGroup(entity) && entity.saveData['year']">{{entity.saveData['year']}}</div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="viewMode === 'list'">
+            <img [src]="'file:///'+entity.imagePath" alt="" />
+            <div class="detailsWrap">
                 <div class="details" [style.zoom]="negateScale">
                     <div class="name">{{entity.name}}</div>
                     <div class="year" *ngIf="!isGroup(entity) && entity.saveData['year']">{{entity.saveData['year']}}</div>
+                    <div class="description">{{entity.saveData['description']}}</div>
                 </div>
-            </ng-container>
-            <ng-container *ngIf="viewMode === 'list'">
-                <img [src]="'file:///'+entity.imagePath" alt=""/>
-                <div class="detailsWrap">
-                    <div class="details" [style.zoom]="negateScale">
-                        <div class="name">{{entity.name}}</div>
-                        <div class="year" *ngIf="!isGroup(entity) && entity.saveData['year']">{{entity.saveData['year']}}</div>
-                        <div class="description">{{entity.saveData['description']}}</div>
-                    </div>
-                </div>
-            </ng-container>
-        </div>
-        <app-media-list [class]="viewMode" *ngIf="entity === openedGroup" [(selectedMedia)]="selectedMedia" [viewMode]="viewMode"
-            [scale]="scale" [media]="openedGroup['children']"> </app-media-list>
-    </ng-container>
+            </div>
+        </ng-container>
+    </div>
+    <app-media-list [class]="viewMode" *ngIf="entity === openedGroup" [(selectedMedia)]="selectedMedia" [viewMode]="viewMode"
+        [scale]="scale" [media]="openedGroup['children']"> </app-media-list>
 </ng-container>
-<ng-template #notElectronMessage>
-    <div>Error loading media: {{mediaService.loadError}}</div>
-</ng-template>

@@ -47,24 +47,42 @@ export class HomeComponent {
         this.filterMedia();
     }
 
-    constructor(private mediaService: MediaService) { }
+    constructor(public mediaService: MediaService) {}
 
     public loadMedia() {
-        // Reload only when closing settings or not loaded yet.
         this.loadedMedia = [];
         if (this.displayedMediaType && this.showGroups != null) {
             switch (this.displayedMediaType) {
                 case "movies":
-                    this.loadedMedia = this.showGroups ? this.mediaService.getGroupedMovies() : this.mediaService.getMovies();
+                    if (this.showGroups) {
+                        this.mediaService.getGroupedMovies().subscribe(results => {
+                            this.loadedMedia = results;
+                            this.filterMedia();
+                        });
+                    } else {
+                        this.mediaService.getMovies().subscribe(results => {
+                            this.loadedMedia = results;
+                            this.filterMedia();
+                        });
+                    }
                     break;
                 case "series":
-                    this.loadedMedia = this.showGroups ? this.mediaService.getGroupedSeries() : this.mediaService.getSeries();
+                    if (this.showGroups) {
+                        this.mediaService.getGroupedSeries().subscribe(results => {
+                            this.loadedMedia = results;
+                            this.filterMedia();
+                        });
+                    } else {
+                        this.mediaService.getSeries().subscribe(results => {
+                            this.loadedMedia = results;
+                            this.filterMedia();
+                        });
+                    }
                     break;
                 default:
                     break;
             }
         }
-        this.filterMedia();
     }
 
     public closeSettings() {
@@ -76,14 +94,18 @@ export class HomeComponent {
     private filterMedia() {
         if (this.searchText != null && !this.showGroups) {
             this.displayedMedia = this.loadedMedia.filter(value => {
-                if (value.name && value.name.toLocaleLowerCase().includes(this.searchText) ||
-                    value.saveData.description && value.saveData.description.toLocaleLowerCase().includes(this.searchText)) {
+                if (
+                    (value.name && value.name.toLocaleLowerCase().includes(this.searchText)) ||
+                    (value.saveData.description && value.saveData.description.toLocaleLowerCase().includes(this.searchText))
+                ) {
                     return true;
                 }
                 if (value instanceof Movie || value instanceof Series) {
-                    if (value.saveData.actors && value.saveData.actors.toLocaleLowerCase().includes(this.searchText) ||
-                        value.saveData.genre && value.saveData.genre.toLocaleLowerCase().includes(this.searchText) ||
-                        value.saveData.year && value.saveData.year.toLocaleLowerCase().includes(this.searchText)) {
+                    if (
+                        (value.saveData.actors && value.saveData.actors.toLocaleLowerCase().includes(this.searchText)) ||
+                        (value.saveData.genre && value.saveData.genre.toLocaleLowerCase().includes(this.searchText)) ||
+                        (value.saveData.year && value.saveData.year.toLocaleLowerCase().includes(this.searchText))
+                    ) {
                         return true;
                     }
                 }
