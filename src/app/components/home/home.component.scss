@@ -3,47 +3,45 @@ $backgroundColor: #0a415a;
 
 :host {
    display: block;
-   background-color: $backgroundColor;
    width: 100%;
    height: 100%;
+   background-color: $backgroundColor;
 }
 
 app-header {
-   background-color: darken($color: $backgroundColor, $amount: 7);
+   position: relative;
+   z-index: 1;
    display: block;
    height: $headerHeight;
+   background-color: darken($color: $backgroundColor, $amount: 7);
    box-shadow: 0px 0px 15px 0px black;
-   z-index: 1;
-   position: relative;
 }
 
 app-media-list {
-   height: calc(100% - #{$headerHeight});
-   width: 100%;
-   vertical-align: top;
    display: inline-block;
-   padding: 10px;
    overflow-y: auto;
-
-   &.detailsOpen {
-       width: 50%;
-   }
+   padding: 10px;
+   width: 100%;
+   height: calc(100% - #{$headerHeight});
+   vertical-align: top;
 }
 
 app-media-details {
-    display: inline-block;
-    background-color: darken($color: $backgroundColor, $amount: 3);
+    position: absolute;;
+    right: 0px;
     padding: 10px;
-    height: CALC(100% - #{$headerHeight});
     width: 50%;
-    vertical-align: top;
+    height: CALC(100% - #{$headerHeight});
+    background-color: darken($color: $backgroundColor, $amount: 3);
     box-shadow: 0px 0px 15px 0px black;
+    vertical-align: top;
+    opacity: 0.99;
 }
 
 app-settings {
     display: block;
-    padding: 10px;
-    height: CALC(100% - #{$headerHeight});
-    width: 100%;
     overflow-y: auto;
+    padding: 10px;
+    width: 100%;
+    height: CALC(100% - #{$headerHeight});
 }
