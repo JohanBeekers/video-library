@@ -14,13 +14,9 @@
             [(selectedMedia)]="selectedMedia"
             [viewMode]="viewMode"
             [scale]="scale"
+            (mouseenter)="selectedMedia = null"
         ></app-media-list>
-        <app-media-details
-            *ngIf="selectedMedia"
-            [media]="selectedMedia"
-            (closeClick)="selectedMedia = null"
-            (mouseleave)="selectedMedia = null"
-        ></app-media-details>
+        <app-media-details *ngIf="selectedMedia" [media]="selectedMedia" (closeClick)="selectedMedia = null"></app-media-details>
         <ng-template #notElectronMessage>
             <div>Error loading media: {{ mediaService.loadError }}</div>
         </ng-template>
