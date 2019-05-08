@@ -26,12 +26,40 @@ export class MediaService {
     constructor(private electronService: ElectronService, private settingsService: SettingsService) {}
 
     /**
-     * Loads all media in a directory.
-     * @param dir - The directory to load media from.
+     * Loads all movies in a directory asynchronously.
+     * @param dir - The directory to load movies from.
+     */
+    private loadMoviesInDirAsync(dir: string): Promise<MediaEntity[]> {
+        return new Promise((resolve, reject) => {
+            const media: MediaEntity[] = [];
+            this.electronService.fs.readdir(dir, (err, files) => {
+                if (err) {
+                    return reject(err);
+                }
+                media.push(...this.handleMovieFiles(dir, files));
+                resolve(media);
+            });
+        });
+    }
+
+    /**
+     * Loads all movies in a directory.
+     * @param dir - The directory to load movies from.
      */
     private loadMoviesInDir(dir: string): MediaEntity[] {
         const media: MediaEntity[] = [];
         const files = this.electronService.fs.readdirSync(dir);
+        media.push(...this.handleMovieFiles(dir, files));
+        return media;
+    }
+
+    /**
+     * Converts movie files to media entities and continues recursive search in folders.
+     * @param dir - The directory of the files.
+     * @param files - The file names.
+     */
+    private handleMovieFiles(dir: string, files: string[]): MediaEntity[] {
+        const media: MediaEntity[] = [];
         files.forEach(file => {
             const fullPath = path.join(dir, file);
             if (this.electronService.fs.statSync(fullPath).isDirectory()) {
@@ -51,12 +79,40 @@ export class MediaService {
     }
 
     /**
-     * Loads all media in a directory.
-     * @param dir - The directory to load media from.
+     * Loads all series in a directory asynchronously.
+     * @param dir - The directory to load movies from.
+     */
+    private loadSeriesInDirAsync(dir: string): Promise<MediaEntity[]> {
+        return new Promise((resolve, reject) => {
+            const media: MediaEntity[] = [];
+            this.electronService.fs.readdir(dir, (err, files) => {
+                if (err) {
+                    return reject(err);
+                }
+                media.push(...this.handleSerieFiles(dir, files));
+                resolve(media);
+            });
+        });
+    }
+
+    /**
+     * Loads all series in a directory.
+     * @param dir - The directory to load series from.
      */
     private loadSeriesInDir(dir: string): MediaEntity[] {
         const media: MediaEntity[] = [];
         const files = this.electronService.fs.readdirSync(dir);
+        media.push(...this.handleSerieFiles(dir, files));
+        return media;
+    }
+
+    /**
+     * Converts serie files to media entities and continues recursive search in folders.
+     * @param dir - The directory of the files.
+     * @param files - The file names.
+     */
+    private handleSerieFiles(dir: string, files: string[]): MediaEntity[] {
+        const media: MediaEntity[] = [];
         files.forEach(file => {
             const fullPath = path.join(dir, file);
             if (this.electronService.fs.statSync(fullPath).isDirectory()) {
@@ -104,7 +160,7 @@ export class MediaService {
     /**
      * Load movies from the drive.
      */
-    public loadMovies() {
+    public async loadMovies() {
         this.allMovies = [];
         this.groupedMovies = [];
         this._loadError = "";
@@ -117,7 +173,7 @@ export class MediaService {
             if (!this.electronService.fs.existsSync(movieDir)) {
                 this._loadError = `Could not find configured movie directory: '${this.settingsService.settings.movieDirectory}'`;
             } else {
-                this.groupedMovies = this.loadMoviesInDir(movieDir);
+                this.groupedMovies = await this.loadMoviesInDirAsync(movieDir);
             }
         }
     }
@@ -125,7 +181,7 @@ export class MediaService {
     /**
      * Load series from the drive.
      */
-    public loadSeries() {
+    public async loadSeries() {
         this.allSeries = [];
         this.groupedSeries = [];
         this._loadError = "";
@@ -138,7 +194,7 @@ export class MediaService {
             if (!this.electronService.fs.existsSync(seriesDir)) {
                 this._loadError = `Could not find configured series directory: '${this.settingsService.settings.seriesDirectory}'`;
             } else {
-                this.groupedSeries = this.loadSeriesInDir(seriesDir);
+                this.groupedSeries = await this.loadSeriesInDirAsync(seriesDir);
             }
         }
     }
@@ -146,55 +202,43 @@ export class MediaService {
     /**
      * Get all the loaded groups and movies.
      */
-    public getGroupedMovies(): Observable<MediaEntity[]> {
-        return new Observable<MediaEntity[]>(observer => {
-            if (!this.groupedMovies) {
-                this.loadMovies();
-            }
-            observer.next(this.groupedMovies);
-            observer.complete();
-        });
+    public async getGroupedMovies(): Promise<MediaEntity[]> {
+        if (!this.groupedMovies) {
+            await this.loadMovies();
+        }
+        return this.groupedMovies;
     }
 
     /**
      * Get only the loaded movies. No groups or series.
      * This includes movies that where otherwise in a group.
      */
-    public getMovies(): Observable<Movie[]> {
-        return new Observable<Movie[]>(observer => {
-            if (!this.allMovies) {
-                this.loadMovies();
-            }
-            observer.next(this.allMovies);
-            observer.complete();
-        });
+    public async getMovies(): Promise<Movie[]> {
+        if (!this.allMovies) {
+            await this.loadMovies();
+        }
+        return this.allMovies;
     }
 
     /**
      * Get all the loaded groups and series.
      */
-    public getGroupedSeries(): Observable<MediaEntity[]> {
-        return new Observable<MediaEntity[]>(observer => {
-            if (!this.groupedSeries) {
-                this.loadSeries();
-            }
-            observer.next(this.groupedSeries);
-            observer.complete();
-        });
+    public async getGroupedSeries(): Promise<MediaEntity[]> {
+        if (!this.groupedSeries) {
+            await this.loadSeries();
+        }
+        return this.groupedSeries;
     }
 
     /**
      * Get only the loaded series. No groups or movies.
      * This includes series that where otherwise in a group.
      */
-    public getSeries(): Observable<Series[]> {
-        return new Observable<Series[]>(observer => {
-            if (!this.allSeries) {
-                this.loadSeries();
-            }
-            observer.next(this.allSeries);
-            observer.complete();
-        });
+    public async getSeries(): Promise<Series[]> {
+        if (!this.allSeries) {
+            await this.loadSeries();
+        }
+        return this.allSeries;
     }
 
     /**

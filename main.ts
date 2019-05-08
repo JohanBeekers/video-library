@@ -1,11 +1,4 @@
-import {
-    app,
-    BrowserWindow,
-    screen,
-    ipcMain,
-    DownloadItem,
-    shell
-} from "electron";
+import { app, BrowserWindow, screen, ipcMain, DownloadItem, shell } from "electron";
 import * as path from "path";
 import * as url from "url";
 import * as electronDl from "electron-dl";
@@ -86,9 +79,7 @@ try {
                 directory: args2.targetDir,
                 filename: args2.targetFileName
             })
-            .then((dl: DownloadItem) =>
-                console.log(`saved: ${dl.getSavePath()}`)
-            )
+            .then((dl: DownloadItem) => console.log(`saved: ${dl.getSavePath()}`))
             .catch(console.error);
     });
 

@@ -49,34 +49,26 @@ export class HomeComponent {
 
     constructor(public mediaService: MediaService) {}
 
-    public loadMedia() {
+    public async loadMedia() {
         this.loadedMedia = [];
         if (this.displayedMediaType && this.showGroups != null) {
             switch (this.displayedMediaType) {
                 case "movies":
                     if (this.showGroups) {
-                        this.mediaService.getGroupedMovies().subscribe(results => {
-                            this.loadedMedia = results;
-                            this.filterMedia();
-                        });
+                        this.loadedMedia = await this.mediaService.getGroupedMovies();
+                        this.filterMedia();
                     } else {
-                        this.mediaService.getMovies().subscribe(results => {
-                            this.loadedMedia = results;
-                            this.filterMedia();
-                        });
+                        this.loadedMedia = await this.mediaService.getMovies();
+                        this.filterMedia();
                     }
                     break;
                 case "series":
                     if (this.showGroups) {
-                        this.mediaService.getGroupedSeries().subscribe(results => {
-                            this.loadedMedia = results;
-                            this.filterMedia();
-                        });
+                        this.loadedMedia = await this.mediaService.getGroupedSeries();
+                        this.filterMedia();
                     } else {
-                        this.mediaService.getSeries().subscribe(results => {
-                            this.loadedMedia = results;
-                            this.filterMedia();
-                        });
+                        this.loadedMedia = await this.mediaService.getSeries();
+                        this.filterMedia();
                     }
                     break;
                 default:
